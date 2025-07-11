@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowRight, Star, Users, Leaf, MapPin, Calendar, Heart } from 'lucide-react';
+import { ArrowRight, Star, Users, Leaf, MapPin, Calendar, Heart, Mic, Globe, Smartphone, Award, BookOpen, TrendingUp } from 'lucide-react';
 import { realDestinations } from '../data/realDestinations';
 import { useLanguage } from '../contexts/LanguageContext';
 
@@ -14,6 +14,32 @@ const HomePage: React.FC<HomePageProps> = ({ onDestinationSelect, onBooking }) =
   // Use first 4 destinations from real destinations data
   const featuredDestinations = realDestinations.slice(0, 4);
 
+  const platformFeatures = [
+    {
+      icon: Mic,
+      title: language === 'te' ? 'వాయిస్ అసిస్టెంట్' : language === 'hi' ? 'वॉयस असिस्टेंट' : 'Voice Assistant',
+      description: language === 'te' ? 'తెలుగులో మాట్లాడి బుకింగ్ చేయండి' : language === 'hi' ? 'हिंदी में बोलकर बुकिंग करें' : 'Book by speaking in your language',
+      color: 'bg-purple-500'
+    },
+    {
+      icon: Globe,
+      title: language === 'te' ? 'బహుభాషా మద్దతు' : language === 'hi' ? 'बहुभाषी समर्थन' : 'Multi-Language Support',
+      description: language === 'te' ? 'తెలుగు, హిందీ, ఇంగ్లీష్‌లో అందుబాటులో' : language === 'hi' ? 'तेलुगु, हिंदी, अंग्रेजी में उपलब्ध' : 'Available in Telugu, Hindi, English',
+      color: 'bg-blue-500'
+    },
+    {
+      icon: Smartphone,
+      title: language === 'te' ? 'మొబైల్ ఫస్ట్' : language === 'hi' ? 'मोबाइल फर्स्ट' : 'Mobile First',
+      description: language === 'te' ? 'మీ ఫోన్‌తో పూర్తి అనుభవం' : language === 'hi' ? 'आपके फोन से पूरा अनुभव' : 'Complete experience on your phone',
+      color: 'bg-emerald-500'
+    },
+    {
+      icon: Award,
+      title: language === 'te' ? 'కమ్యూనిటీ సర్టిఫికేషన్' : language === 'hi' ? 'कम्युनिटी सर्टिफिकेशन' : 'Community Certification',
+      description: language === 'te' ? 'ఎకో-సర్టిఫైడ్, మహిళా నేతృత్వ బ్యాడ్జ్‌లు' : language === 'hi' ? 'इको-सर्टिफाइड, महिला नेतृत्व बैज' : 'Eco-certified, Women-led badges',
+      color: 'bg-amber-500'
+    }
+  ];
   const stats = [
     { label: t('stats.communities'), value: '250+', icon: Users },
     { label: t('stats.experiences'), value: '500+', icon: Leaf },
@@ -94,6 +120,37 @@ const HomePage: React.FC<HomePageProps> = ({ onDestinationSelect, onBooking }) =
                 </div>
                 <div className="text-3xl font-bold text-gray-900 mb-2">{stat.value}</div>
                 <div className="text-gray-600">{stat.label}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Platform Features */}
+      <section className="py-16 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              {language === 'te' ? 'అధునాతన ప్లాట్‌ఫారమ్ ఫీచర్లు' : language === 'hi' ? 'उन्नत प्लेटफॉर्म सुविधाएं' : 'Advanced Platform Features'}
+            </h2>
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+              {language === 'te' 
+                ? 'ఆధునిక సాంకేతికతతో గ్రామీణ పర్యాటకాన్ని మార్చుతున్నాము'
+                : language === 'hi'
+                ? 'आधुनिक तकनीक से ग्रामीण पर्यटन को बदल रहे हैं'
+                : 'Transforming rural tourism with cutting-edge technology'
+              }
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {platformFeatures.map((feature, index) => (
+              <div key={index} className="text-center group hover:scale-105 transition-transform duration-300">
+                <div className={`w-16 h-16 ${feature.color} rounded-full flex items-center justify-center mx-auto mb-4 group-hover:shadow-lg transition-shadow`}>
+                  <feature.icon className="h-8 w-8 text-white" />
+                </div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">{feature.title}</h3>
+                <p className="text-gray-600">{feature.description}</p>
               </div>
             ))}
           </div>

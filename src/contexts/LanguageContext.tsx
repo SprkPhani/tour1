@@ -18,6 +18,7 @@ const translations = {
     'nav.marketplace': 'Marketplace',
     'nav.become_host': 'Become Host',
     'nav.money_flow': 'Money Flow',
+    'nav.community': 'Community',
     'nav.login': 'Login',
     'nav.dashboard': 'Dashboard',
     'nav.bookings': 'My Bookings',
@@ -146,6 +147,7 @@ const translations = {
     'nav.marketplace': 'మార్కెట్‌ప్లేస్',
     'nav.become_host': 'హోస్ట్ అవ్వండి',
     'nav.money_flow': 'డబ్బు ప్రవాహం',
+    'nav.community': 'కమ్యూనిటీ',
     'nav.login': 'లాగిన్',
     'nav.dashboard': 'డాష్‌బోర్డ్',
     'nav.bookings': 'నా బుకింగ్‌లు',
@@ -274,6 +276,7 @@ const translations = {
     'nav.marketplace': 'बाज़ार',
     'nav.become_host': 'होस्ट बनें',
     'nav.money_flow': 'पैसे का प्रवाह',
+    'nav.community': 'समुदाय',
     'nav.login': 'लॉगिन',
     'nav.dashboard': 'डैशबोर्ड',
     'nav.bookings': 'मेरी बुकिंग',
@@ -306,6 +309,7 @@ const translations = {
     'nav.marketplace': 'சந்தை',
     'nav.become_host': 'புரவலர் ஆகுங்கள்',
     'nav.money_flow': 'பணப் பாய்ச்சல்',
+    'nav.community': 'சமூகம்',
     'nav.login': 'உள்நுழைவு',
 
     // Common translations for Tamil...
@@ -323,6 +327,7 @@ const translations = {
     'nav.marketplace': 'ಮಾರುಕಟ್ಟೆ',
     'nav.become_host': 'ಆತಿಥೇಯರಾಗಿ',
     'nav.money_flow': 'ಹಣದ ಹರಿವು',
+    'nav.community': 'ಸಮುದಾಯ',
     'nav.login': 'ಲಾಗಿನ್',
 
     // Common translations for Kannada...

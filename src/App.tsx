@@ -15,6 +15,9 @@ import BecomeHostPage from './pages/BecomeHostPage';
 import FoodOrderPage from './pages/FoodOrderPage';
 import StayInfoPage from './pages/StayInfoPage';
 import DonationsPage from './pages/DonationsPage';
+import CommunityOnboardingPage from './pages/CommunityOnboardingPage';
+import HostPortalPage from './pages/HostPortalPage';
+import CapacityBuildingPage from './pages/CapacityBuildingPage';
 import IndiaMap from './components/IndiaMap';
 import HelpCenter from './components/HelpCenter';
 import ChatBot from './components/ChatBot';
@@ -94,6 +97,12 @@ function App() {
         return <StayInfoPage />;
       case 'donations':
         return <DonationsPage />;
+      case 'community-onboarding':
+        return <CommunityOnboardingPage />;
+      case 'host-portal':
+        return <HostPortalPage />;
+      case 'capacity-building':
+        return <CapacityBuildingPage />;
       case 'india-map':
         return (
           <IndiaMap

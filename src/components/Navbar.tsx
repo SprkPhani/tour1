@@ -1,5 +1,5 @@
 import React from 'react';
-import { Mountain, User, Menu, X, Heart, Calendar, Settings, Globe, ShoppingBag, TrendingUp, UtensilsCrossed, Home, HelpCircle, MapPin } from 'lucide-react';
+import { Mountain, User, Menu, X, Heart, Calendar, Settings, Globe, Users, Award, BookOpen } from 'lucide-react';
 import { User as UserType } from '../types';
 import { useLanguage } from '../contexts/LanguageContext';
 
@@ -14,20 +14,53 @@ const Navbar: React.FC<NavbarProps> = ({ currentPage, setCurrentPage, user, onLo
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = React.useState(false);
   const [isLanguageMenuOpen, setIsLanguageMenuOpen] = React.useState(false);
+  const [isCommunityMenuOpen, setIsCommunityMenuOpen] = React.useState(false);
   const { language, setLanguage, t } = useLanguage();
 
   const navItems = [
-    { id: 'home', label: t('nav.home'), icon: null },
-    { id: 'destinations', label: t('nav.destinations'), icon: null },
-    { id: 'experiences', label: t('nav.experiences'), icon: null },
-    { id: 'marketplace', label: t('nav.marketplace'), icon: ShoppingBag },
-    { id: 'community', label: t('nav.community'), icon: null },
-    { id: 'money-flow', label: t('nav.money_flow'), icon: TrendingUp },
-    { id: 'food-order', label: 'Food Order', icon: UtensilsCrossed },
-    { id: 'stay-info', label: 'Stay Info', icon: Home },
-    { id: 'donations', label: 'Donations', icon: Heart },
-    { id: 'india-map', label: 'Explore Map', icon: MapPin },
-    { id: 'help', label: 'Help Center', icon: HelpCircle },
+    { id: 'home', label: t('nav.home') },
+    { id: 'destinations', label: t('nav.destinations') },
+    { id: 'experiences', label: t('nav.experiences') },
+    { id: 'marketplace', label: t('nav.marketplace') },
+  ];
+
+  const communityItems = [
+    { 
+      id: 'community-onboarding', 
+      label: 'Community Onboarding', 
+      badge: '👥',
+      description: 'Empowerment & Training'
+    },
+    { 
+      id: 'host-portal', 
+      label: 'Host Portal', 
+      badge: '🏠',
+      description: 'Easy Registration & Management'
+    },
+    { 
+      id: 'capacity-building', 
+      label: 'Capacity Building', 
+      badge: '📚',
+      description: 'Training & Certification'
+    },
+    { 
+      id: 'eco-certified', 
+      label: 'Eco-Certified Hosts', 
+      badge: '🌱',
+      description: 'Sustainable Tourism Leaders'
+    },
+    { 
+      id: 'women-led', 
+      label: 'Women-Led Initiatives', 
+      badge: '👩‍💼',
+      description: 'Female Entrepreneurs'
+    },
+    { 
+      id: 'tribal-heritage', 
+      label: 'Tribal Heritage', 
+      badge: '🏺',
+      description: 'Indigenous Culture Preservation'
+    }
   ];
 
   const languages = [
@@ -57,16 +90,51 @@ const Navbar: React.FC<NavbarProps> = ({ currentPage, setCurrentPage, user, onLo
               <button
                 key={item.id}
                 onClick={() => setCurrentPage(item.id)}
-                className={`flex items-center space-x-1 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
                   currentPage === item.id
                     ? 'text-emerald-600 bg-emerald-50'
                     : 'text-gray-700 hover:text-emerald-600 hover:bg-emerald-50'
                 }`}
               >
-                {item.icon && <item.icon className="h-4 w-4" />}
-                <span>{item.label}</span>
+                {item.label}
               </button>
             ))}
+
+            {/* Community Dropdown */}
+            <div className="relative">
+              <button
+                onClick={() => setIsCommunityMenuOpen(!isCommunityMenuOpen)}
+                className="flex items-center space-x-1 px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-emerald-600 hover:bg-emerald-50 transition-colors"
+              >
+                <Users className="h-4 w-4" />
+                <span>Community</span>
+              </button>
+
+              {isCommunityMenuOpen && (
+                <div className="absolute left-0 mt-2 w-80 bg-white rounded-md shadow-lg py-2 z-50 border">
+                  <div className="px-4 py-2 border-b border-gray-100">
+                    <h3 className="font-semibold text-gray-900">Community Ecosystem</h3>
+                    <p className="text-xs text-gray-600">Empowering rural communities through technology</p>
+                  </div>
+                  {communityItems.map((item) => (
+                    <button
+                      key={item.id}
+                      onClick={() => {
+                        setCurrentPage(item.id);
+                        setIsCommunityMenuOpen(false);
+                      }}
+                      className="w-full flex items-start space-x-3 px-4 py-3 text-left hover:bg-gray-50 transition-colors"
+                    >
+                      <span className="text-lg">{item.badge}</span>
+                      <div className="flex-1">
+                        <div className="font-medium text-gray-900 text-sm">{item.label}</div>
+                        <div className="text-xs text-gray-600">{item.description}</div>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
 
           {/* Right Side Menu */}
@@ -210,16 +278,34 @@ const Navbar: React.FC<NavbarProps> = ({ currentPage, setCurrentPage, user, onLo
                     setCurrentPage(item.id);
                     setIsMenuOpen(false);
                   }}
-                  className={`flex items-center space-x-2 w-full text-left px-3 py-2 rounded-md text-base font-medium transition-colors ${
+                  className={`w-full text-left px-3 py-2 rounded-md text-base font-medium transition-colors ${
                     currentPage === item.id
                       ? 'text-emerald-600 bg-emerald-50'
                       : 'text-gray-700 hover:text-emerald-600 hover:bg-emerald-50'
                   }`}
                 >
-                  {item.icon && <item.icon className="h-4 w-4" />}
-                  <span>{item.label}</span>
+                  {item.label}
                 </button>
               ))}
+              
+              {/* Mobile Community Items */}
+              <div className="border-t pt-2 mt-2">
+                <p className="px-3 py-1 text-xs font-semibold text-gray-500 uppercase">Community</p>
+                {communityItems.map((item) => (
+                  <button
+                    key={item.id}
+                    onClick={() => {
+                      setCurrentPage(item.id);
+                      setIsMenuOpen(false);
+                    }}
+                    className="flex items-center space-x-2 w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-emerald-600 hover:bg-emerald-50 transition-colors"
+                  >
+                    <span>{item.badge}</span>
+                    <span>{item.label}</span>
+                  </button>
+                ))}
+              </div>
+              
               <button
                 onClick={() => {
                   setCurrentPage('become-host');

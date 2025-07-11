@@ -25,18 +25,22 @@ const VoiceAssistant: React.FC<VoiceAssistantProps> = ({ onNavigate, onFilterUpd
   const [messages, setMessages] = useState<VoiceMessage[]>([
     {
       id: '1',
-      text: 'Hello! I\'m your VillageStay AI assistant. I can help you with bookings, destinations, cultural information, and navigation. You can speak to me in Hindi, Telugu, or English!',
+      text: language === 'te' 
+        ? 'నమస్కారం! నేను మీ VillageStay AI సహాయకుడిని. నేను బుకింగ్‌లు, గమ్యస్థానాలు, సాంస్కృతిక సమాచారం మరియు నావిగేషన్‌తో సహాయం చేయగలను. మీరు తెలుగు, హిందీ లేదా ఇంగ్లీష్‌లో నాతో మాట్లాడవచ్చు!'
+        : language === 'hi'
+        ? 'नमस्ते! मैं आपका VillageStay AI सहायक हूं। मैं बुकिंग, गंतव्य, सांस्कृतिक जानकारी और नेवीगेशन में मदद कर सकता हूं। आप हिंदी, तेलुगु या अंग्रेजी में मुझसे बात कर सकते हैं!'
+        : 'Hello! I\'m your VillageStay AI assistant. I can help you with bookings, destinations, cultural information, and navigation. You can speak to me in Hindi, Telugu, or English!',
       isBot: true,
       timestamp: new Date(),
-      language: 'en'
+      language: language
     }
   ]);
   const [inputText, setInputText] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // Initialize Gemini AI (you'll need to add your API key)
-  const genAI = new GoogleGenerativeAI(import.meta.env.REACT_APP_GEMINI_API_KEY || 'your-gemini-api-key');
+  // Initialize Gemini AI
+  const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY || 'your-gemini-api-key');
   const model = genAI.getGenerativeModel({ model: "gemini-pro" });
 
   const { speak, cancel, speaking } = useSpeechSynthesis();
@@ -66,18 +70,6 @@ const VoiceAssistant: React.FC<VoiceAssistantProps> = ({ onNavigate, onFilterUpd
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const translateText = async (text: string, targetLang: string): Promise<string> => {
-    try {
-      // Mock translation - replace with actual Google Translate API
-      const response = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=en|${targetLang}`);
-      const data = await response.json();
-      return data.responseData?.translatedText || text;
-    } catch (error) {
-      console.error('Translation error:', error);
-      return text;
-    }
-  };
-
   const detectLanguage = (text: string): string => {
     // Simple language detection based on script
     if (/[\u0900-\u097F]/.test(text)) return 'hi'; // Hindi
@@ -99,6 +91,11 @@ const VoiceAssistant: React.FC<VoiceAssistantProps> = ({ onNavigate, onFilterUpd
         - Navigation and travel planning
         - Sustainable tourism practices
         - Local experiences and activities
+        - Community onboarding and host portal information
+        - Capacity building and training programs
+        - Certification systems and badges
+        - Revenue tracking and transparent payments
+        - Multi-language support and voice assistance
         
         Available destinations include:
         - Araku Valley (Andhra Pradesh) - Coffee plantations, tribal culture
@@ -112,6 +109,16 @@ const VoiceAssistant: React.FC<VoiceAssistantProps> = ({ onNavigate, onFilterUpd
         - Khajuraho Villages (Madhya Pradesh) - UNESCO heritage temples
         - Kumaon Hill Villages (Uttarakhand) - Mountain culture, terraced fields
         
+        Community Features:
+        - Community Onboarding & Empowerment (👥): Training and support for rural communities
+        - Host Portal (🏠): Mobile-first registration, voice onboarding, transparent revenue tracking
+        - Capacity Building (📚): Training modules for hospitality, hygiene, storytelling, sustainability
+        - Certification System: Eco-certified, Women-led, Heritage Keeper, Digital Pioneer badges
+        - Multi-language support: Telugu, Hindi, English, Tamil, Kannada
+        - Voice-based assistance and registration
+        - Blockchain and cloud security for data protection
+        - Docker and Kubernetes for scalable infrastructure
+        
         Navigation commands you can handle:
         - "go to destinations" or "show destinations" -> navigate to destinations page
         - "book [destination name]" -> navigate to booking for that destination
@@ -120,6 +127,10 @@ const VoiceAssistant: React.FC<VoiceAssistantProps> = ({ onNavigate, onFilterUpd
         - "become host" -> navigate to host registration
         - "food order" -> navigate to food ordering
         - "help" -> navigate to help center
+        - "community onboarding" -> navigate to community-onboarding
+        - "host portal" -> navigate to host-portal
+        - "capacity building" -> navigate to capacity-building
+        - "training" or "certification" -> navigate to capacity-building
         
         Filter commands:
         - "filter by [state]" -> apply state filter
@@ -133,6 +144,10 @@ const VoiceAssistant: React.FC<VoiceAssistantProps> = ({ onNavigate, onFilterUpd
         If the user asks for navigation, start your response with "NAVIGATE:" followed by the page name.
         If the user asks for filtering, start your response with "FILTER:" followed by the filter criteria.
         If the user asks about a specific destination, provide detailed information about that place.
+        If the user asks about community features, host portal, or training, provide comprehensive information.
+        
+        For Telugu responses, use proper Telugu script and natural language.
+        For Hindi responses, use proper Devanagari script and natural language.
       `;
 
       const result = await model.generateContent(contextPrompt);
@@ -218,22 +233,28 @@ const VoiceAssistant: React.FC<VoiceAssistantProps> = ({ onNavigate, onFilterUpd
   const handleNavigation = (page: string, originalText: string) => {
     const lowerText = originalText.toLowerCase();
     
-    if (lowerText.includes('destination') || lowerText.includes('places')) {
+    if (lowerText.includes('destination') || lowerText.includes('places') || lowerText.includes('గమ్యస్థానాలు')) {
       onNavigate('destinations');
-    } else if (lowerText.includes('marketplace') || lowerText.includes('shop')) {
+    } else if (lowerText.includes('marketplace') || lowerText.includes('shop') || lowerText.includes('మార్కెట్')) {
       onNavigate('marketplace');
-    } else if (lowerText.includes('money') || lowerText.includes('impact') || lowerText.includes('flow')) {
+    } else if (lowerText.includes('money') || lowerText.includes('impact') || lowerText.includes('flow') || lowerText.includes('డబ్బు')) {
       onNavigate('money-flow');
-    } else if (lowerText.includes('host') || lowerText.includes('become')) {
+    } else if (lowerText.includes('host') || lowerText.includes('become') || lowerText.includes('హోస్ట్')) {
       onNavigate('become-host');
-    } else if (lowerText.includes('food') || lowerText.includes('order')) {
+    } else if (lowerText.includes('food') || lowerText.includes('order') || lowerText.includes('ఆహారం')) {
       onNavigate('food-order');
-    } else if (lowerText.includes('help') || lowerText.includes('support')) {
+    } else if (lowerText.includes('help') || lowerText.includes('support') || lowerText.includes('సహాయం')) {
       onNavigate('help');
-    } else if (lowerText.includes('donation')) {
+    } else if (lowerText.includes('donation') || lowerText.includes('దానం')) {
       onNavigate('donations');
-    } else if (lowerText.includes('map')) {
+    } else if (lowerText.includes('map') || lowerText.includes('మ్యాప్')) {
       onNavigate('india-map');
+    } else if (lowerText.includes('community onboarding') || lowerText.includes('కమ్యూనిటీ')) {
+      onNavigate('community-onboarding');
+    } else if (lowerText.includes('host portal') || lowerText.includes('హోస్ట్ పోర్టల్')) {
+      onNavigate('host-portal');
+    } else if (lowerText.includes('capacity building') || lowerText.includes('training') || lowerText.includes('శిక్షణ')) {
+      onNavigate('capacity-building');
     }
   };
 
@@ -281,6 +302,12 @@ const VoiceAssistant: React.FC<VoiceAssistantProps> = ({ onNavigate, onFilterUpd
     }
   };
 
+  const quickActions = language === 'te' 
+    ? ['గమ్యస్థానాలు చూపించు', 'అరకు వ్యాలీ బుక్ చేయి', 'వారసత్వ ప్రదేశాలు', 'ఆహార ఆర్డర్']
+    : language === 'hi'
+    ? ['गंतव्य दिखाएं', 'अराकू वैली बुक करें', 'विरासत स्थल', 'खाना ऑर्डर करें']
+    : ['Show destinations', 'Book Araku Valley', 'Heritage sites', 'Food ordering'];
+
   return (
     <>
       {/* Voice Assistant Button */}
@@ -304,7 +331,12 @@ const VoiceAssistant: React.FC<VoiceAssistantProps> = ({ onNavigate, onFilterUpd
             <div>
               <h3 className="font-semibold">VillageStay AI Assistant</h3>
               <p className="text-xs text-purple-100">
-                {isListening ? 'Listening...' : isProcessing ? 'Processing...' : 'Ready to help'}
+                {isListening 
+                  ? (language === 'te' ? 'వింటున్నాను...' : language === 'hi' ? 'सुन रहा हूं...' : 'Listening...') 
+                  : isProcessing 
+                  ? (language === 'te' ? 'ప్రాసెస్ చేస్తున్నాను...' : language === 'hi' ? 'प्रोसेसिंग...' : 'Processing...') 
+                  : (language === 'te' ? 'సహాయానికి సిద్ధం' : language === 'hi' ? 'मदद के लिए तैयार' : 'Ready to help')
+                }
               </p>
             </div>
           </div>
@@ -339,7 +371,7 @@ const VoiceAssistant: React.FC<VoiceAssistantProps> = ({ onNavigate, onFilterUpd
           <div className="flex items-center space-x-2">
             <Globe className="h-4 w-4 text-gray-500" />
             <span className="text-sm text-gray-600">
-              Speaking in: {language === 'hi' ? 'हिंदी' : language === 'te' ? 'తెలుగు' : 'English'}
+              {language === 'hi' ? 'हिंदी में बोल रहे हैं' : language === 'te' ? 'తెలుగులో మాట్లాడుతున్నారు' : 'Speaking in English'}
             </span>
           </div>
           {isListening && (
@@ -407,14 +439,11 @@ const VoiceAssistant: React.FC<VoiceAssistantProps> = ({ onNavigate, onFilterUpd
 
         {/* Quick Actions */}
         <div className="px-4 py-2 border-t border-gray-200">
-          <p className="text-xs text-gray-500 mb-2">Quick actions:</p>
+          <p className="text-xs text-gray-500 mb-2">
+            {language === 'te' ? 'త్వరిత చర్యలు:' : language === 'hi' ? 'त्वरित कार्य:' : 'Quick actions:'}
+          </p>
           <div className="flex flex-wrap gap-1">
-            {[
-              'Show destinations',
-              'Book Araku Valley',
-              'Heritage sites',
-              'Food ordering'
-            ].map((action, index) => (
+            {quickActions.map((action, index) => (
               <button
                 key={index}
                 onClick={() => handleVoiceInput(action)}
@@ -434,7 +463,13 @@ const VoiceAssistant: React.FC<VoiceAssistantProps> = ({ onNavigate, onFilterUpd
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
               onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-              placeholder="Type or speak your message..."
+              placeholder={
+                language === 'te' 
+                  ? 'మీ సందేశాన్ని టైప్ చేయండి లేదా మాట్లాడండి...'
+                  : language === 'hi'
+                  ? 'अपना संदेश टाइप करें या बोलें...'
+                  : 'Type or speak your message...'
+              }
               className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-purple-500 focus:border-purple-500 text-sm"
             />
             <button
