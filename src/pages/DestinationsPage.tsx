@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Search, Filter, Star, MapPin, Heart, Grid, List } from 'lucide-react';
-import { Destination } from '../types';
+import { realDestinations } from '../data/realDestinations';
 import { useLanguage } from '../contexts/LanguageContext';
 
 interface DestinationsPageProps {
@@ -15,148 +15,8 @@ const DestinationsPage: React.FC<DestinationsPageProps> = ({ onDestinationSelect
   const [priceRange, setPriceRange] = useState([0, 5000]);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
-  const destinations: Destination[] = [
-    {
-      id: '1',
-      name: 'Araku Valley',
-      location: 'Andhra Pradesh',
-      description: 'Experience the mystical beauty of Araku Valley with its coffee plantations, tribal culture, and breathtaking landscapes. Home to indigenous tribes with rich traditions.',
-      price: 2500,
-      rating: 4.8,
-      reviews: 147,
-      images: ['https://images.pexels.com/photos/1271619/pexels-photo-1271619.jpeg'],
-      activities: ['Coffee plantation tours', 'Tribal village visits', 'Nature walks', 'Waterfall trekking', 'Traditional craft workshops'],
-      accommodation: ['Eco-friendly bamboo huts', 'Traditional tribal homes', 'Organic farm stays'],
-      sustainability: {
-        carbonFootprint: 'Low impact eco-tourism',
-        communityImpact: '85% revenue to local communities',
-        culturalPreservation: 'Traditional tribal customs preserved'
-      },
-      hostInfo: {
-        name: 'Ravi Tribal Community',
-        experience: '15+ years in sustainable tourism',
-        languages: ['Telugu', 'Hindi', 'English']
-      },
-      availability: []
-    },
-    {
-      id: '2',
-      name: 'Lambasingi',
-      location: 'Andhra Pradesh',
-      description: 'Discover the Kashmir of Andhra Pradesh with its unique climate, apple orchards, and serene mountain views. Perfect for nature lovers and peace seekers.',
-      price: 3200,
-      rating: 4.7,
-      reviews: 98,
-      images: ['https://images.pexels.com/photos/1183099/pexels-photo-1183099.jpeg'],
-      activities: ['Apple orchard tours', 'Mountain hiking', 'Sunrise viewing', 'Local farming experience', 'Nature photography'],
-      accommodation: ['Mountain cottages', 'Farmhouse stays', 'Camping sites'],
-      sustainability: {
-        carbonFootprint: 'Carbon neutral activities',
-        communityImpact: '90% revenue to local farmers',
-        culturalPreservation: 'Traditional farming methods preserved'
-      },
-      hostInfo: {
-        name: 'Lakshmi Farmers Collective',
-        experience: '20+ years in organic farming',
-        languages: ['Telugu', 'Hindi', 'English']
-      },
-      availability: []
-    },
-    {
-      id: '3',
-      name: 'Maredumilli',
-      location: 'Andhra Pradesh',
-      description: 'Immerse yourself in pristine forests, ancient temples, and traditional tribal lifestyle in this biodiversity hotspot. A paradise for wildlife enthusiasts.',
-      price: 2800,
-      rating: 4.9,
-      reviews: 156,
-      images: ['https://images.pexels.com/photos/1566837/pexels-photo-1566837.jpeg'],
-      activities: ['Forest trekking', 'Temple visits', 'Bird watching', 'Tribal craft workshops', 'Wildlife photography'],
-      accommodation: ['Forest lodges', 'Tribal homestays', 'Tree houses'],
-      sustainability: {
-        carbonFootprint: 'Forest conservation focused',
-        communityImpact: '95% revenue to tribal communities',
-        culturalPreservation: 'Ancient tribal traditions maintained'
-      },
-      hostInfo: {
-        name: 'Venu Tribal Cooperative',
-        experience: '25+ years in forest conservation',
-        languages: ['Telugu', 'Gondi', 'Hindi', 'English']
-      },
-      availability: []
-    },
-    {
-      id: '4',
-      name: 'Papikondalu',
-      location: 'Andhra Pradesh',
-      description: 'Experience the majestic Godavari River gorge with its dramatic cliffs, boat rides, and riverside tribal villages. Perfect for adventure seekers.',
-      price: 3500,
-      rating: 4.6,
-      reviews: 89,
-      images: ['https://images.pexels.com/photos/1271619/pexels-photo-1271619.jpeg'],
-      activities: ['River boat cruises', 'Cliff climbing', 'Fishing with locals', 'Riverside camping', 'Water sports'],
-      accommodation: ['Riverside cottages', 'Boat houses', 'Tribal village stays'],
-      sustainability: {
-        carbonFootprint: 'River ecosystem protection',
-        communityImpact: '80% revenue to fishing communities',
-        culturalPreservation: 'Traditional fishing methods preserved'
-      },
-      hostInfo: {
-        name: 'Srinivas River Community',
-        experience: '18+ years in river tourism',
-        languages: ['Telugu', 'Hindi', 'English']
-      },
-      availability: []
-    },
-    {
-      id: '5',
-      name: 'Horsley Hills',
-      location: 'Andhra Pradesh',
-      description: 'Escape to the cool hills with scenic viewpoints, adventure activities, and colonial charm. A perfect weekend getaway destination.',
-      price: 2200,
-      rating: 4.5,
-      reviews: 78,
-      images: ['https://images.pexels.com/photos/1183099/pexels-photo-1183099.jpeg'],
-      activities: ['Hill station tours', 'Adventure sports', 'Colonial heritage walks', 'Nature trails'],
-      accommodation: ['Hill resort stays', 'Colonial bungalows', 'Eco-cottages'],
-      sustainability: {
-        carbonFootprint: 'Green energy initiatives',
-        communityImpact: '75% revenue to local communities',
-        culturalPreservation: 'Colonial heritage preserved'
-      },
-      hostInfo: {
-        name: 'Madhav Hill Communities',
-        experience: '12+ years in hill tourism',
-        languages: ['Telugu', 'Hindi', 'English']
-      },
-      availability: []
-    },
-    {
-      id: '6',
-      name: 'Belum Caves Region',
-      location: 'Andhra Pradesh',
-      description: 'Explore underground wonders and surrounding villages with unique geological formations and ancient history. A fascinating cultural experience.',
-      price: 1800,
-      rating: 4.4,
-      reviews: 65,
-      images: ['https://images.pexels.com/photos/1566837/pexels-photo-1566837.jpeg'],
-      activities: ['Cave exploration', 'Geological tours', 'Village walks', 'Traditional pottery'],
-      accommodation: ['Village homestays', 'Eco-lodges', 'Farm stays'],
-      sustainability: {
-        carbonFootprint: 'Minimal environmental impact',
-        communityImpact: '88% revenue to local artisans',
-        culturalPreservation: 'Traditional crafts preserved'
-      },
-      hostInfo: {
-        name: 'Ramesh Artisan Community',
-        experience: '10+ years in cultural tourism',
-        languages: ['Telugu', 'Hindi', 'English']
-      },
-      availability: []
-    }
-  ];
 
-  const filteredDestinations = destinations.filter(destination => {
+  const filteredDestinations = realDestinations.filter(destination => {
     const matchesSearch = destination.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          destination.location.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          destination.description.toLowerCase().includes(searchTerm.toLowerCase());

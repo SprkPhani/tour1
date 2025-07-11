@@ -1,5 +1,5 @@
 import React from 'react';
-import { Mountain, User, Menu, X, Heart, Calendar, Settings, Globe, ShoppingBag, TrendingUp } from 'lucide-react';
+import { Mountain, User, Menu, X, Heart, Calendar, Settings, Globe, ShoppingBag, TrendingUp, UtensilsCrossed, Home, HelpCircle } from 'lucide-react';
 import { User as UserType } from '../types';
 import { useLanguage } from '../contexts/LanguageContext';
 
@@ -23,6 +23,9 @@ const Navbar: React.FC<NavbarProps> = ({ currentPage, setCurrentPage, user, onLo
     { id: 'marketplace', label: t('nav.marketplace'), icon: ShoppingBag },
     { id: 'community', label: t('nav.community'), icon: null },
     { id: 'money-flow', label: t('nav.money_flow'), icon: TrendingUp },
+    { id: 'food-order', label: 'Food Order', icon: UtensilsCrossed },
+    { id: 'stay-info', label: 'Stay Info', icon: Home },
+    { id: 'help', label: 'Help Center', icon: HelpCircle },
   ];
 
   const languages = [

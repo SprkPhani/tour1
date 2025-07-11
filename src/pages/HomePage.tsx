@@ -1,6 +1,6 @@
 import React from 'react';
 import { ArrowRight, Star, Users, Leaf, MapPin, Calendar, Heart } from 'lucide-react';
-import { Destination } from '../types';
+import { realDestinations } from '../data/realDestinations';
 import { useLanguage } from '../contexts/LanguageContext';
 
 interface HomePageProps {
@@ -11,100 +11,8 @@ interface HomePageProps {
 const HomePage: React.FC<HomePageProps> = ({ onDestinationSelect, onBooking }) => {
   const { t } = useLanguage();
 
-  const featuredDestinations: Destination[] = [
-    {
-      id: '1',
-      name: 'Araku Valley',
-      location: 'Andhra Pradesh',
-      description: 'Experience the mystical beauty of Araku Valley with its coffee plantations, tribal culture, and breathtaking landscapes.',
-      price: 2500,
-      rating: 4.8,
-      reviews: 147,
-      images: ['https://images.pexels.com/photos/1271619/pexels-photo-1271619.jpeg'],
-      activities: ['Coffee plantation tours', 'Tribal village visits', 'Nature walks', 'Waterfall trekking'],
-      accommodation: ['Eco-friendly bamboo huts', 'Traditional tribal homes', 'Organic farm stays'],
-      sustainability: {
-        carbonFootprint: 'Low impact eco-tourism',
-        communityImpact: '85% revenue to local communities',
-        culturalPreservation: 'Traditional tribal customs preserved'
-      },
-      hostInfo: {
-        name: 'Ravi Tribal Community',
-        experience: '15+ years in sustainable tourism',
-        languages: ['Telugu', 'Hindi', 'English']
-      },
-      availability: []
-    },
-    {
-      id: '2',
-      name: 'Lambasingi',
-      location: 'Andhra Pradesh',
-      description: 'Discover the Kashmir of Andhra Pradesh with its unique climate, apple orchards, and serene mountain views.',
-      price: 3200,
-      rating: 4.7,
-      reviews: 98,
-      images: ['https://images.pexels.com/photos/1183099/pexels-photo-1183099.jpeg'],
-      activities: ['Apple orchard tours', 'Mountain hiking', 'Sunrise viewing', 'Local farming experience'],
-      accommodation: ['Mountain cottages', 'Farmhouse stays', 'Camping sites'],
-      sustainability: {
-        carbonFootprint: 'Carbon neutral activities',
-        communityImpact: '90% revenue to local farmers',
-        culturalPreservation: 'Traditional farming methods preserved'
-      },
-      hostInfo: {
-        name: 'Lakshmi Farmers Collective',
-        experience: '20+ years in organic farming',
-        languages: ['Telugu', 'Hindi', 'English']
-      },
-      availability: []
-    },
-    {
-      id: '3',
-      name: 'Maredumilli',
-      location: 'Andhra Pradesh',
-      description: 'Immerse yourself in pristine forests, ancient temples, and traditional tribal lifestyle in this biodiversity hotspot.',
-      price: 2800,
-      rating: 4.9,
-      reviews: 156,
-      images: ['https://images.pexels.com/photos/1566837/pexels-photo-1566837.jpeg'],
-      activities: ['Forest trekking', 'Temple visits', 'Bird watching', 'Tribal craft workshops'],
-      accommodation: ['Forest lodges', 'Tribal homestays', 'Tree houses'],
-      sustainability: {
-        carbonFootprint: 'Forest conservation focused',
-        communityImpact: '95% revenue to tribal communities',
-        culturalPreservation: 'Ancient tribal traditions maintained'
-      },
-      hostInfo: {
-        name: 'Venu Tribal Cooperative',
-        experience: '25+ years in forest conservation',
-        languages: ['Telugu', 'Gondi', 'Hindi', 'English']
-      },
-      availability: []
-    },
-    {
-      id: '4',
-      name: 'Papikondalu',
-      location: 'Andhra Pradesh',
-      description: 'Experience the majestic Godavari River gorge with its dramatic cliffs, boat rides, and riverside tribal villages.',
-      price: 3500,
-      rating: 4.6,
-      reviews: 89,
-      images: ['https://images.pexels.com/photos/1271619/pexels-photo-1271619.jpeg'],
-      activities: ['River boat cruises', 'Cliff climbing', 'Fishing with locals', 'Riverside camping'],
-      accommodation: ['Riverside cottages', 'Boat houses', 'Tribal village stays'],
-      sustainability: {
-        carbonFootprint: 'River ecosystem protection',
-        communityImpact: '80% revenue to fishing communities',
-        culturalPreservation: 'Traditional fishing methods preserved'
-      },
-      hostInfo: {
-        name: 'Srinivas River Community',
-        experience: '18+ years in river tourism',
-        languages: ['Telugu', 'Hindi', 'English']
-      },
-      availability: []
-    }
-  ];
+  // Use first 4 destinations from real destinations data
+  const featuredDestinations = realDestinations.slice(0, 4);
 
   const stats = [
     { label: t('stats.communities'), value: '250+', icon: Users },
@@ -159,7 +67,7 @@ const HomePage: React.FC<HomePageProps> = ({ onDestinationSelect, onBooking }) =
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <button
-                onClick={() => onDestinationSelect(featuredDestinations[0])}
+                onClick={() => onDestinationSelect(realDestinations[0])}
                 className="bg-amber-500 hover:bg-amber-600 text-white px-8 py-4 rounded-lg text-lg font-semibold transition-colors flex items-center justify-center gap-2"
               >
                 {t('hero.explore')}

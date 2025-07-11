@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Calendar, Users, CreditCard, Shield, ArrowLeft, CheckCircle, Info } from 'lucide-react';
+import { Calendar, Users, CreditCard, Shield, ArrowLeft, CheckCircle, Info, Smartphone } from 'lucide-react';
 import { Destination, User } from '../types';
+import PaymentModal from '../components/PaymentModal';
 
 interface BookingPageProps {
   destination: Destination;
@@ -23,6 +24,7 @@ const BookingPage: React.FC<BookingPageProps> = ({ destination, user, onBookingC
   });
 
   const [currentStep, setCurrentStep] = useState(1);
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [paymentData, setPaymentData] = useState({
     cardNumber: '',
     expiryDate: '',
@@ -51,11 +53,12 @@ const BookingPage: React.FC<BookingPageProps> = ({ destination, user, onBookingC
     if (currentStep < 3) {
       setCurrentStep(currentStep + 1);
     } else {
-      // Process booking
-      setTimeout(() => {
-        onBookingComplete();
-      }, 2000);
+      setShowPaymentModal(true);
     }
+  };
+
+  const handlePaymentSuccess = () => {
+    onBookingComplete();
   };
 
   const handleInputChange = (field: string, value: any) => {
@@ -285,73 +288,51 @@ const BookingPage: React.FC<BookingPageProps> = ({ destination, user, onBookingC
               {/* Step 3: Payment */}
               {currentStep === 3 && (
                 <div className="bg-white rounded-lg shadow-md p-6">
-                  <h2 className="text-lg font-semibold text-gray-900 mb-6">Payment details</h2>
+                  <h2 className="text-lg font-semibold text-gray-900 mb-6">Payment Summary</h2>
                   
-                  <div className="space-y-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Cardholder name
-                      </label>
-                      <input
-                        type="text"
-                        value={paymentData.cardholderName}
-                        onChange={(e) => setPaymentData(prev => ({ ...prev, cardholderName: e.target.value }))}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-emerald-500 focus:border-emerald-500"
-                        required
-                      />
+                  <div className="space-y-6">
+                    <div className="bg-gray-50 p-4 rounded-lg">
+                      <h3 className="font-medium text-gray-900 mb-3">Payment Methods Available</h3>
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div className="flex items-center space-x-2 p-3 bg-white rounded-md border">
+                          <Smartphone className="h-5 w-5 text-purple-600" />
+                          <div>
+                            <p className="font-medium text-sm">UPI Payment</p>
+                            <p className="text-xs text-gray-500">PhonePe, GPay, Paytm</p>
+                          </div>
+                        </div>
+                        <div className="flex items-center space-x-2 p-3 bg-white rounded-md border">
+                          <CreditCard className="h-5 w-5 text-blue-600" />
+                          <div>
+                            <p className="font-medium text-sm">Cards</p>
+                            <p className="text-xs text-gray-500">Visa, Mastercard, RuPay</p>
+                          </div>
+                        </div>
+                        <div className="flex items-center space-x-2 p-3 bg-white rounded-md border">
+                          <Shield className="h-5 w-5 text-green-600" />
+                          <div>
+                            <p className="font-medium text-sm">Net Banking</p>
+                            <p className="text-xs text-gray-500">All major banks</p>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                     
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Card number
-                      </label>
-                      <input
-                        type="text"
-                        value={paymentData.cardNumber}
-                        onChange={(e) => setPaymentData(prev => ({ ...prev, cardNumber: e.target.value }))}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-emerald-500 focus:border-emerald-500"
-                        placeholder="1234 5678 9012 3456"
-                        required
-                      />
-                    </div>
-                    
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Expiry date
-                        </label>
-                        <input
-                          type="text"
-                          value={paymentData.expiryDate}
-                          onChange={(e) => setPaymentData(prev => ({ ...prev, expiryDate: e.target.value }))}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-emerald-500 focus:border-emerald-500"
-                          placeholder="MM/YY"
-                          required
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          CVV
-                        </label>
-                        <input
-                          type="text"
-                          value={paymentData.cvv}
-                          onChange={(e) => setPaymentData(prev => ({ ...prev, cvv: e.target.value }))}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-emerald-500 focus:border-emerald-500"
-                          placeholder="123"
-                          required
-                        />
-                      </div>
+                    <div className="bg-emerald-50 p-4 rounded-lg">
+                      <h3 className="font-medium text-emerald-900 mb-2">Total Amount: ₹{pricing.total}</h3>
+                      <p className="text-sm text-emerald-700">
+                        85% of your payment (₹{Math.round(pricing.total * 0.85)}) goes directly to the local community
+                      </p>
                     </div>
                   </div>
 
-                  <div className="mt-6 bg-green-50 p-4 rounded-lg">
+                  <div className="mt-6 bg-blue-50 p-4 rounded-lg">
                     <div className="flex items-start space-x-2">
-                      <Shield className="h-5 w-5 text-green-600 mt-0.5" />
+                      <Shield className="h-5 w-5 text-blue-600 mt-0.5" />
                       <div>
-                        <h3 className="font-medium text-green-900">Secure Payment</h3>
-                        <p className="text-sm text-green-700 mt-1">
-                          Your payment information is encrypted and secure. We use industry-standard security measures.
+                        <h3 className="font-medium text-blue-900">Secure & Trusted</h3>
+                        <p className="text-sm text-blue-700 mt-1">
+                          All payments are processed securely. Your booking is protected with our guarantee.
                         </p>
                       </div>
                     </div>
@@ -376,7 +357,7 @@ const BookingPage: React.FC<BookingPageProps> = ({ destination, user, onBookingC
                   type="submit"
                   className="px-6 py-2 bg-emerald-600 text-white rounded-md font-medium hover:bg-emerald-700"
                 >
-                  {currentStep === 3 ? 'Complete Booking' : 'Continue'}
+                  {currentStep === 3 ? 'Proceed to Payment' : 'Continue'}
                 </button>
               </div>
             </form>
@@ -449,6 +430,13 @@ const BookingPage: React.FC<BookingPageProps> = ({ destination, user, onBookingC
           </div>
         </div>
       </div>
+      
+      <PaymentModal
+        isOpen={showPaymentModal}
+        onClose={() => setShowPaymentModal(false)}
+        amount={pricing.total}
+        onPaymentSuccess={handlePaymentSuccess}
+      />
     </div>
   );
 };

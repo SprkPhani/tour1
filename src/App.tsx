@@ -10,6 +10,10 @@ import UserDashboard from './pages/UserDashboard';
 import MarketplacePage from './pages/MarketplacePage';
 import MoneyFlowPage from './pages/MoneyFlowPage';
 import BecomeHostPage from './pages/BecomeHostPage';
+import FoodOrderPage from './pages/FoodOrderPage';
+import StayInfoPage from './pages/StayInfoPage';
+import HelpCenter from './components/HelpCenter';
+import ChatBot from './components/ChatBot';
 import { User, Destination } from './types';
 
 function App() {
@@ -61,6 +65,12 @@ function App() {
         return <MoneyFlowPage />;
       case 'become-host':
         return <BecomeHostPage />;
+      case 'food-order':
+        return <FoodOrderPage />;
+      case 'stay-info':
+        return <StayInfoPage />;
+      case 'help':
+        return <HelpCenter />;
       case 'destination-detail':
         return selectedDestination ? (
           <DestinationDetailPage
@@ -106,6 +116,7 @@ function App() {
           onLogout={handleLogout}
         />
         {renderCurrentPage()}
+        <ChatBot />
       </div>
     </LanguageProvider>
   );
