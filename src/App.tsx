@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { LanguageProvider } from './contexts/LanguageContext';
 import Navbar from './components/Navbar';
+import VoiceAssistant from './components/VoiceAssistant';
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import DestinationsPage from './pages/DestinationsPage';
@@ -9,9 +10,12 @@ import BookingPage from './pages/BookingPage';
 import UserDashboard from './pages/UserDashboard';
 import MarketplacePage from './pages/MarketplacePage';
 import MoneyFlowPage from './pages/MoneyFlowPage';
+import DetailedMoneyFlowPage from './pages/DetailedMoneyFlowPage';
 import BecomeHostPage from './pages/BecomeHostPage';
 import FoodOrderPage from './pages/FoodOrderPage';
 import StayInfoPage from './pages/StayInfoPage';
+import DonationsPage from './pages/DonationsPage';
+import IndiaMap from './components/IndiaMap';
 import HelpCenter from './components/HelpCenter';
 import ChatBot from './components/ChatBot';
 import { User, Destination } from './types';
@@ -20,6 +24,7 @@ function App() {
   const [currentPage, setCurrentPage] = useState('home');
   const [user, setUser] = useState<User | null>(null);
   const [selectedDestination, setSelectedDestination] = useState<Destination | null>(null);
+  const [filters, setFilters] = useState({});
 
   const handleLogin = (userData: User) => {
     setUser(userData);
@@ -41,6 +46,21 @@ function App() {
     setCurrentPage('booking');
   };
 
+  const handleNavigate = (page: string, data?: any) => {
+    setCurrentPage(page);
+    if (data) {
+      if (page === 'destination-detail' || page === 'booking') {
+        setSelectedDestination(data);
+      }
+    }
+  };
+
+  const handleFilterUpdate = (newFilters: any) => {
+    setFilters(newFilters);
+    if (currentPage !== 'destinations') {
+      setCurrentPage('destinations');
+    }
+  };
   const renderCurrentPage = () => {
     switch (currentPage) {
       case 'home':
@@ -57,18 +77,30 @@ function App() {
           <DestinationsPage
             onDestinationSelect={handleDestinationSelect}
             onBooking={handleBooking}
+            filters={filters}
           />
         );
       case 'marketplace':
         return <MarketplacePage />;
       case 'money-flow':
         return <MoneyFlowPage />;
+      case 'detailed-money-flow':
+        return <DetailedMoneyFlowPage />;
       case 'become-host':
         return <BecomeHostPage />;
       case 'food-order':
         return <FoodOrderPage />;
       case 'stay-info':
         return <StayInfoPage />;
+      case 'donations':
+        return <DonationsPage />;
+      case 'india-map':
+        return (
+          <IndiaMap
+            onDestinationSelect={handleDestinationSelect}
+            onBooking={handleBooking}
+          />
+        );
       case 'help':
         return <HelpCenter />;
       case 'destination-detail':
@@ -117,6 +149,10 @@ function App() {
         />
         {renderCurrentPage()}
         <ChatBot />
+        <VoiceAssistant
+          onNavigate={handleNavigate}
+          onFilterUpdate={handleFilterUpdate}
+        />
       </div>
     </LanguageProvider>
   );

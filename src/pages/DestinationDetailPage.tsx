@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowLeft, Star, MapPin, Calendar, Users, Heart, Share2, Camera, Leaf, Globe, Award, Download } from 'lucide-react';
+import { ArrowLeft, Star, MapPin, Calendar, Users, Heart, Share2, Camera, Leaf, Globe, Award, Download, Navigation } from 'lucide-react';
 import { Destination } from '../types';
 import { useLanguage } from '../contexts/LanguageContext';
 import { generateDestinationPDF } from '../utils/pdfGenerator';
@@ -63,6 +63,29 @@ const DestinationDetailPage: React.FC<DestinationDetailPageProps> = ({
     generateDestinationPDF(destination);
   };
 
+  const openGoogleMaps = () => {
+    // Mock coordinates - in real app, these would come from destination data
+    const coordinates = getDestinationCoordinates(destination.name);
+    const url = `https://www.google.com/maps/dir/?api=1&destination=${coordinates.lat},${coordinates.lng}&travelmode=driving`;
+    window.open(url, '_blank');
+  };
+
+  const getDestinationCoordinates = (name: string) => {
+    const coords: { [key: string]: { lat: number; lng: number } } = {
+      'Araku Valley': { lat: 18.3273, lng: 82.8739 },
+      'Lambasingi': { lat: 17.9500, lng: 82.5833 },
+      'Maredumilli': { lat: 17.7333, lng: 81.4500 },
+      'Papikondalu': { lat: 17.4500, lng: 81.1000 },
+      'Hampi Village': { lat: 15.3350, lng: 76.4600 },
+      'Kumbakonam Villages': { lat: 10.9601, lng: 79.3788 },
+      'Spiti Valley Villages': { lat: 32.2432, lng: 78.0414 },
+      'Majuli Island Villages': { lat: 26.9500, lng: 94.2167 },
+      'Khajuraho Villages': { lat: 24.8318, lng: 79.9199 },
+      'Kumaon Hill Villages': { lat: 29.5971, lng: 79.6593 }
+    };
+    return coords[name] || { lat: 20.5937, lng: 78.9629 };
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
@@ -83,6 +106,13 @@ const DestinationDetailPage: React.FC<DestinationDetailPageProps> = ({
               >
                 <Download className="h-4 w-4" />
                 <span>{t('common.download') || 'Download'} Guide</span>
+              </button>
+              <button
+                onClick={openGoogleMaps}
+                className="flex items-center space-x-2 bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition-colors"
+              >
+                <Navigation className="h-4 w-4" />
+                <span>Get Directions</span>
               </button>
               <button className="p-2 text-gray-600 hover:text-gray-900">
                 <Share2 className="h-5 w-5" />

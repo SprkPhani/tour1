@@ -25,6 +25,8 @@ const Navbar: React.FC<NavbarProps> = ({ currentPage, setCurrentPage, user, onLo
     { id: 'money-flow', label: t('nav.money_flow'), icon: TrendingUp },
     { id: 'food-order', label: 'Food Order', icon: UtensilsCrossed },
     { id: 'stay-info', label: 'Stay Info', icon: Home },
+    { id: 'donations', label: 'Donations', icon: Heart },
+    { id: 'india-map', label: 'Explore Map', icon: MapPin },
     { id: 'help', label: 'Help Center', icon: HelpCircle },
   ];
 

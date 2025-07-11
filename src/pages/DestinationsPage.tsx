@@ -6,15 +6,24 @@ import { useLanguage } from '../contexts/LanguageContext';
 interface DestinationsPageProps {
   onDestinationSelect: (destination: Destination) => void;
   onBooking: (destination: Destination) => void;
+  filters?: any;
 }
 
-const DestinationsPage: React.FC<DestinationsPageProps> = ({ onDestinationSelect, onBooking }) => {
+const DestinationsPage: React.FC<DestinationsPageProps> = ({ onDestinationSelect, onBooking, filters = {} }) => {
   const { t } = useLanguage();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedFilter, setSelectedFilter] = useState('all');
   const [priceRange, setPriceRange] = useState([0, 5000]);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [selectedState, setSelectedState] = useState('all');
+  const [selectedType, setSelectedType] = useState('all');
 
+  // Apply external filters
+  React.useEffect(() => {
+    if (filters.state) setSelectedState(filters.state);
+    if (filters.type) setSelectedType(filters.type);
+    if (filters.sustainability) setSelectedFilter(filters.sustainability);
+  }, [filters]);
 
   const filteredDestinations = realDestinations.filter(destination => {
     const matchesSearch = destination.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -24,13 +33,24 @@ const DestinationsPage: React.FC<DestinationsPageProps> = ({ onDestinationSelect
     const matchesFilter = selectedFilter === 'all' || 
                          (selectedFilter === 'budget' && destination.price <= 2500) ||
                          (selectedFilter === 'premium' && destination.price > 3000) ||
-                         (selectedFilter === 'top-rated' && destination.rating >= 4.7);
+                         (selectedFilter === 'top-rated' && destination.rating >= 4.7) ||
+                         (selectedFilter === 'eco-friendly' && destination.sustainability.carbonFootprint.includes('eco'));
     
     const matchesPrice = destination.price >= priceRange[0] && destination.price <= priceRange[1];
     
-    return matchesSearch && matchesFilter && matchesPrice;
+    const matchesState = selectedState === 'all' || destination.location.includes(selectedState);
+    
+    const matchesType = selectedType === 'all' || 
+                       (selectedType === 'heritage' && (destination.name.includes('Heritage') || destination.description.includes('heritage') || destination.description.includes('UNESCO'))) ||
+                       (selectedType === 'cultural' && (destination.description.includes('cultural') || destination.description.includes('tribal') || destination.description.includes('traditional'))) ||
+                       (selectedType === 'ancient' && (destination.description.includes('ancient') || destination.description.includes('temple'))) ||
+                       (selectedType === 'adventure' && (destination.description.includes('trek') || destination.description.includes('climb') || destination.description.includes('adventure')));
+    
+    return matchesSearch && matchesFilter && matchesPrice && matchesState && matchesType;
   });
 
+  const states = ['all', 'Andhra Pradesh', 'Karnataka', 'Tamil Nadu', 'Himachal Pradesh', 'Assam', 'Madhya Pradesh', 'Uttarakhand'];
+  const types = ['all', 'heritage', 'cultural', 'ancient', 'adventure', 'eco-friendly'];
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -46,7 +66,7 @@ const DestinationsPage: React.FC<DestinationsPageProps> = ({ onDestinationSelect
 
         {/* Search and Filters */}
         <div className="bg-white rounded-lg shadow-md p-6 mb-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+          <div className="grid grid-cols-1 md:grid-cols-6 gap-4 items-end">
             {/* Search */}
             <div className="md:col-span-2">
               <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -64,6 +84,42 @@ const DestinationsPage: React.FC<DestinationsPageProps> = ({ onDestinationSelect
               </div>
             </div>
 
+            {/* State Filter */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                State
+              </label>
+              <select
+                value={selectedState}
+                onChange={(e) => setSelectedState(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-emerald-500 focus:border-emerald-500"
+              >
+                {states.map(state => (
+                  <option key={state} value={state}>
+                    {state === 'all' ? 'All States' : state}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Type Filter */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Type
+              </label>
+              <select
+                value={selectedType}
+                onChange={(e) => setSelectedType(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-emerald-500 focus:border-emerald-500"
+              >
+                {types.map(type => (
+                  <option key={type} value={type}>
+                    {type === 'all' ? 'All Types' : type.charAt(0).toUpperCase() + type.slice(1)}
+                  </option>
+                ))}
+              </select>
+            </div>
+
             {/* Filter */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -78,6 +134,7 @@ const DestinationsPage: React.FC<DestinationsPageProps> = ({ onDestinationSelect
                 <option value="budget">{t('destinations.budget')}</option>
                 <option value="premium">{t('destinations.premium')}</option>
                 <option value="top-rated">{t('destinations.top_rated')}</option>
+                <option value="eco-friendly">Eco-Friendly</option>
               </select>
             </div>
 
@@ -249,6 +306,8 @@ const DestinationsPage: React.FC<DestinationsPageProps> = ({ onDestinationSelect
               onClick={() => {
                 setSearchTerm('');
                 setSelectedFilter('all');
+                setSelectedState('all');
+                setSelectedType('all');
                 setPriceRange([0, 5000]);
               }}
               className="mt-4 text-emerald-600 hover:text-emerald-700 font-medium"
