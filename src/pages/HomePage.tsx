@@ -9,7 +9,7 @@ interface HomePageProps {
 }
 
 const HomePage: React.FC<HomePageProps> = ({ onDestinationSelect, onBooking }) => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
 
   // Use first 4 destinations from real destinations data
   const featuredDestinations = realDestinations.slice(0, 4);
